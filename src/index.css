@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.slick-prev:before{
+    color: white !important;
+    
+} 
+.slick-next:before{
+    color: white !important;
+}
+
+.homeSlider .slick-next{
+    right: 20px !important;
+    
+}
+.homeSlider .slick-prev{
+    left: 20px !important;
+    z-index: 10;
+}
+.homeSlider .slick-dots{
+    bottom: 0 !important;
+    color: white !important;
+    
+}
+.homeSlider .slick-dots li button:before{
+    color: white !important;
+}
+@media (max-width:768px) {
+    .homeSlider .slick-dots li button:before {
+        display: none;
+    }
+    .slick-prev:before{
+        display: none;
+        
+    } 
+    .slick-next:before{
+        display: none;
+    }
+}
