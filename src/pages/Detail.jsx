@@ -74,7 +74,7 @@ const Detail = () => {
               ))}
             </div>
             <div className="flex items-center gap-5 md:my-3">
-              <CircularProgressbar
+              {/* <CircularProgressbar
                 className="!w-12 md:!w-20 bg-slate-500 rounded-[50%] p-2"
                 value={data?.vote_average * 10}
                 text={data?.vote_average?.toFixed(1)}
@@ -84,7 +84,25 @@ const Detail = () => {
                   pathColor: `green`,
                   trailColor: "#9c98a6",
                 })}
-              />
+              /> */}
+
+              <div className="flex flex-col items-center">
+  <CircularProgressbar
+    className="!w-12 md:!w-20 bg-slate-500 rounded-[50%] p-2"
+    value={data?.vote_average * 10}
+    text={data?.vote_average?.toFixed(1)}
+    styles={buildStyles({
+      textSize: "30px",
+      textColor: "white",
+      pathColor: "green",
+      trailColor: "#9c98a6",
+    })}
+  />
+  <span className="text-xs md:text-sm text-white mt-1">
+    {data?.vote_count} votes
+  </span>
+</div>
+
 
               <div>
                 <button className="bg-red-600  p-1 md:p-[10px] rounded-xl">
