@@ -19,7 +19,8 @@ const Detail = () => {
   const { data: review } = useFetch(`/${media_type}/${id}/reviews`);
   const { data: videos } = useFetch(`/${media_type}/${id}/videos`);
   const { data: credits, loading:creaditLoading } = useFetch(`/${media_type}/${id}/credits`);
-  
+  const { data: providersResp, loading: providersLoading } = useFetch(`/${media_type}/${id}/watch/providers`);
+
 
   const director = credits?.crew?.filter((f) => f.job === "Director");
   const writer = credits?.crew?.filter(
@@ -49,7 +50,28 @@ const Detail = () => {
     const options = { day: "2-digit", month: "short", year: "numeric" };
     return new Date(dateString).toLocaleDateString("en-US", options);
   }
-  console.log("vixdio",videos);
+
+  const IMG_BASE = "https://image.tmdb.org/t/p/w92";
+
+const groupOrder = [
+  { key: "flatrate", label: "Stream" },
+  { key: "rent", label: "Rent" },
+  { key: "buy", label: "Buy" },
+  { key: "free", label: "Free" },
+  { key: "ads", label: "With Ads" },
+];
+
+const inProviders = providersResp?.results?.IN;
+const providerGroups = inProviders
+  ? groupOrder
+      .map(g => ({
+        ...g,
+        items: (inProviders[g.key] || []).filter(p => p?.logo_path || p?.provider_name),
+      }))
+      .filter(g => g.items.length > 0)
+  : [];
+
+  
   return (
     <div className="px-5 md:px-20 py-5 text-white">
       {movieLoading ? (<DetailSkeleton/>): (
@@ -195,6 +217,8 @@ const Detail = () => {
           <SliderSection cast={credits?.cast} />
         </div>)}
       </div>
+
+      
       <div className="md:mt-14 mt-6">
   <h1 className="md:text-3xl text-xl font-medium my-3">Videos</h1>
   <div className="flex justify-between flex-wrap gap-4">
@@ -214,6 +238,64 @@ const Detail = () => {
     ))}
   </div>
 </div>
+
+
+      {(providersLoading || providerGroups.length > 0) && (
+  <div className="md:mt-14 mt-6">
+    <div className="flex items-center justify-between">
+      <h2 className="md:text-3xl text-xl font-medium my-3">Where to Watch (India)</h2>
+      {inProviders?.link && (
+        <a
+          href={inProviders.link}
+          target="_blank"
+          rel="noreferrer"
+          className="text-sm md:text-base text-red-400 hover:text-red-300 underline"
+        >
+          View on JustWatch
+        </a>
+      )}
+    </div>
+
+    {providersLoading ? (
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div key={i} className="h-[70px] bg-slate-700/60 rounded-xl animate-pulse" />
+        ))}
+      </div>
+    ) : providerGroups.length === 0 ? (
+      <p className="text-slate-300">No providers listed for India.</p>
+    ) : (
+      <div className="space-y-5">
+        {providerGroups.map(group => (
+          <div key={group.key}>
+            <p className="text-lg md:text-xl font-semibold text-slate-200 mb-3">{group.label}</p>
+            <div className="flex flex-wrap gap-3">
+              {group.items.map(p => (
+                <div
+                  key={p.provider_id}
+                  className="flex items-center gap-3 bg-slate-700/60 rounded-xl p-2 pr-3 hover:bg-slate-700 transition"
+                  title={p.provider_name}
+                >
+                  {p.logo_path ? (
+                    <img
+                      src={`${IMG_BASE}${p.logo_path}`}
+                      alt={p.provider_name}
+                      className="w-10 h-10 rounded-md object-contain bg-slate-800"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-md bg-slate-800" />
+                  )}
+                  <span className="text-sm md:text-base">{p.provider_name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+)}
 
       {/* <div className="md:mt-14 mt-6">
         <h1 className="md:text-3xl text-xl  font-medium my-3">Videos</h1>
