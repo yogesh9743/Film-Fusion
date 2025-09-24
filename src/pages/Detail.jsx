@@ -244,16 +244,7 @@ const providerGroups = inProviders
   <div className="md:mt-14 mt-6">
     <div className="flex items-center justify-between">
       <h2 className="md:text-3xl text-xl font-medium my-3">Where to Watch (India)</h2>
-      {inProviders?.link && (
-        <a
-          href={inProviders.link}
-          target="_blank"
-          rel="noreferrer"
-          className="text-sm md:text-base text-red-400 hover:text-red-300 underline"
-        >
-          View on JustWatch
-        </a>
-      )}
+      <div></div>
     </div>
 
     {providersLoading ? (
@@ -389,12 +380,12 @@ const providerGroups = inProviders
       
      <div className="mt-14 mt-6">
         <p className="text-2xl text-white my-4 uppercase">Recommendations</p>
-        <div className="flex flex-wrap justify-between gap-10">
+      
             {recommendLoading ? <LoadingSkeleton/> : (<div className="flex flex-wrap justify-between gap-10">
           {recommendations?.results?.length > 0 &&
             recommendations?.results?.map((item,i) => <Card data={item} key={i}/>)}
         </div>)}
-        </div>
+
       </div> 
       <div className="md:mt-14 mt-6">
         <p className="md:text-2xl text-white my-4 uppercase">Similar Movies</p>
