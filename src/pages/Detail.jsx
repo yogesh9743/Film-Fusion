@@ -15,7 +15,7 @@ const Detail = () => {
   const { id,media_type } = useParams();
   const { data,loading: movieLoading } = useFetch(`/${media_type}/${id}`);
   const { data: similar, loading:similarLoading } = useFetch(`/${media_type}/${id}/similar`);
-  // const { data: recommendations, loading:recommendLoading } = useFetch(`/${media_type}/${id}/recommendations`);
+  const { data: recommendations, loading:recommendLoading } = useFetch(`/${media_type}/${id}/recommendations`);
   const { data: review } = useFetch(`/${media_type}/${id}/reviews`);
   const { data: videos } = useFetch(`/${media_type}/${id}/videos`);
   const { data: credits, loading:creaditLoading } = useFetch(`/${media_type}/${id}/credits`);
@@ -110,13 +110,13 @@ const Detail = () => {
               </span>
               <span> {formatReleaseDate(data?.release_date ?data?.release_date : data?.first_air_date)}</span>
             </div>
-            <div>
+            {media_type ==="movie" && <div>
               <span className="font-medium text-slate-400">Runtime :</span>
               <span> {formatTime(data?.runtime)}</span>
-            </div>
+            </div>}
             
           </div>
-          <div className="flex gap-5 flex-wrap">
+          {media_type ==="movie" && <div className="flex gap-5 flex-wrap">
           <div>
               <span className="font-medium text-slate-400">Budget :</span>
               <span> ${formatNumberAbbreviation(data?.budget)} </span>
@@ -125,7 +125,7 @@ const Detail = () => {
               <span className="font-medium text-slate-400">Revenue :</span>
               <span> ${formatNumberAbbreviation(data?.revenue)} </span>
             </div>
-          </div>
+          </div>}
           <div className="mb-2 mt-2">
             <span className="font-medium text-slate-400">Director :</span>{" "}
             {director?.map((d, i) => (
@@ -191,7 +191,7 @@ const Detail = () => {
           height="150px"
           className="rounded-xl"
         />
-        <p className="text-sm mt-1 font-medium">{video.name}</p>
+        <p className="text-sm mt-1 font-medium truncate w-[250px]">{video.name}</p>
       </div>
     ))}
   </div>
@@ -286,6 +286,16 @@ const Detail = () => {
           )}
         </div>
       </div>
+      
+     <div className="mt-14 mt-6">
+        <p className="text-2xl text-white my-4 uppercase">Recommendations</p>
+        <div className="flex flex-wrap justify-between gap-10">
+            {recommendLoading ? <LoadingSkeleton/> : (<div className="flex flex-wrap justify-between gap-10">
+          {recommendations?.results?.length > 0 &&
+            recommendations?.results?.map((item,i) => <Card data={item} key={i}/>)}
+        </div>)}
+        </div>
+      </div> 
       <div className="md:mt-14 mt-6">
         <p className="md:text-2xl text-white my-4 uppercase">Similar Movies</p>
         {similarLoading ? <LoadingSkeleton/> : (<div className="flex flex-wrap justify-between gap-10">
@@ -293,14 +303,6 @@ const Detail = () => {
             similar?.results?.map((item,i) => <Card data={item} key={i}/>)}
         </div>)}
       </div>
-      {/* <div className="mt-14">
-        <p className="text-2xl text-white my-4 uppercase">Recommendations</p>
-        <div className="flex flex-wrap justify-between gap-10">
-          {recommendations?.results?.length > 0 &&
-            recommendations?.results?.map((item,i) => <Card data={item} key={i}/>)}
-        </div>
-      </div> */}
-      
     </div>
   );
 };
