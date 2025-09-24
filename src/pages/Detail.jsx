@@ -178,6 +178,26 @@ const Detail = () => {
         </div>)}
       </div>
       <div className="md:mt-14 mt-6">
+  <h1 className="md:text-3xl text-xl font-medium my-3">Videos</h1>
+  <div className="flex justify-between flex-wrap gap-4">
+    {videos?.results?.slice(0, 4).map((video, idx) => (
+      <div key={idx}>
+        <iframe
+          src={`https://www.youtube.com/embed/${video.key}?autoplay=0&loop=0`}
+          frameBorder="0"
+          allowFullScreen
+          title={video.name}
+          width="250px"
+          height="150px"
+          className="rounded-xl"
+        />
+        <p className="text-sm mt-1 font-medium">{video.name}</p>
+      </div>
+    ))}
+  </div>
+</div>
+
+      {/* <div className="md:mt-14 mt-6">
         <h1 className="md:text-3xl text-xl  font-medium my-3">Videos</h1>
         <div className="flex justify-between flex-wrap">
           <div>
@@ -237,7 +257,7 @@ const Detail = () => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="md:mt-14 mt-6">
         <div className=" bg-slate-700 rounded-xl p-2 pl-4">
           <div className="flex justify-between items-center">
